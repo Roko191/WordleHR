@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/*Custom varijable*/
+@theme {
+  --font-title: Wordle;
+  --color-primary: #F5F5DC;
+  --color-darkBg: #121213;
+}
+
+/* Base se koristi za minjanje elementa i osalih 'base' stavri*/
+@layer base{
+    @font-face {
+      font-family: Wordle;
+      font-weight:normal;
+      font-style:normal;
+      font-display:swap;
+      src: url(/NYTKarnakCondensed/Wordle.woff2) format("woff");
+  }
+}
+
+@layer components {
+  .title {
+    @apply text-[50px] text-center font-title text-primary;
+  }
+}
