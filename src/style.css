@@ -3,6 +3,7 @@
 /*Custom varijable*/
 @theme {
   --font-title: Wordle;
+  --font-wordle: Wordle;
   --color-primary: #F5F5DC;
   --color-darkBg: #121213;
 }
@@ -15,11 +16,49 @@
       font-style:normal;
       font-display:swap;
       src: url(/NYTKarnakCondensed/Wordle.woff2) format("woff");
-  }
+    }
+    
+    /* Add these lines to fix centering */
+    html, body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
 }
 
 @layer components {
   .title {
     @apply text-[50px] text-center font-title text-primary;
   }
+
+  .alert-box {
+    @apply bg-red-500 text-primary p-3 mt-5;
+  }
+
+  /* General classes applied to letter box */
+  .letter-box {
+     @apply w-[62px] h-[62px] border-2 flex items-center justify-center text-[32px] font-bold text-white uppercase transition-all duration-300;  
+  }
+
+  /* Specific latter boxes */
+  .no-letter{
+    @apply border-[#3a3a3c] bg-[#121213];
+  }
+
+  .no-eval {
+    @apply bg-[#121213] border-[#565758];
+  }
+
+  .found {
+    @apply border-[#538d4e] bg-[#538d4e];
+  }
+
+  .exists {
+    @apply border-[#b59f3b] bg-[#b59f3b];
+  }
+
+  .not-found{
+    @apply border-[#3a3a3c] bg-[#3a3a3c];
+  }
+
 }
