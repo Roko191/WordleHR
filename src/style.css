@@ -36,8 +36,12 @@
   }
 
   /* General classes applied to letter box */
+  .grid-wordle {
+    @apply grid grid-cols-5 gap-1.5 max-w-[350px] mx-auto px-4;
+  }
+
   .letter-box {
-     @apply w-[62px] h-[62px] border-2 flex items-center justify-center text-[32px] font-bold text-white uppercase transition-all duration-300;  
+    @apply w-[62px] h-[62px] border-2 grid place-items-center text-[32px] font-bold text-white uppercase transition-all duration-300;  
   }
 
   /* Specific latter boxes */
