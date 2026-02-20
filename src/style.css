@@ -24,6 +24,46 @@
       margin: 0;
       padding: 0;
     }
+
+        /* Number input styling */
+    input[type='number'] {
+      background-color: #121213;
+      border: 2px solid #3a3a3c;
+      color: #F5F5DC;
+      padding: 5px 6px;
+      font-size: 18px;
+      font-weight: 500;
+      border-radius: 4px;
+      outline: none;
+      transition: all 0.2s ease;
+      width: 100%;
+      max-width: 100px;
+    }
+    
+    input[type='number']:hover {
+      border-color: #565758;
+    }
+    
+    input[type='number']:focus {
+      border-color: #F5F5DC;
+      box-shadow: 0 0 0 2px rgba(245, 245, 220, 0.1);
+    }
+    
+    /* Remove spinner arrows (optional) */
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    input[type='number'] {
+      -moz-appearance: textfield;
+    }
+    
+    /* Placeholder styling */
+    input[type='number']::placeholder {
+      color: #565758;
+    }
 }
 
 @layer components {

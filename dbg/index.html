@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html class="w-full">
 <head>
 <meta charset="UTF-8">
@@ -94,15 +95,25 @@
                 <div class="letter-box no-letter"></div>
         </div>
 
-        <div id="dynamic-gen-grid">
-            
-        </div>
 
+        <div id="dynamic-grid" class="mt-5">
+            <h3 class="text-white text-md uppercase tracking-wide mb-2 text-center">Dynamic grid gen</h3>
+            <label class="text-primary font-medium">
+              Number of attempts:
+            </label>
+            <br>
+            <input id="dynamic-grid-input" autocomplete="off" type="number" class="mb-5" placeholder="5">
+            <div id="dynamic-gen-grid">
+
+            </div>
+        </div>
     </div>
 
     <div id="footer" class="mt-10">
 
     </div>
 </div>
+
+<script type="module" src="/src/dbg.ts"></script>
 </body>
 </html>
