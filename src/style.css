@@ -64,6 +64,14 @@
     input[type='number']::placeholder {
       color: #565758;
     }
+
+    a {
+      @apply text-primary hover:text-white underline transition-colors;
+    }
+
+    footer {
+      @apply bg-[#1a1a1b] text-center text-primary mt-10 py-8 px-4 border-t border-[#3a3a3c];
+    }
 }
 
 @layer components {
