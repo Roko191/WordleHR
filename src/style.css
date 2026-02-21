@@ -25,8 +25,8 @@
       padding: 0;
     }
 
-        /* Number input styling */
-    input[type='number'] {
+    /* Input styling */
+    input {
       background-color: #121213;
       border: 2px solid #3a3a3c;
       color: #F5F5DC;
@@ -40,16 +40,16 @@
       max-width: 100px;
     }
     
-    input[type='number']:hover {
+    input:hover {
       border-color: #565758;
     }
     
-    input[type='number']:focus {
+    input:focus {
       border-color: #F5F5DC;
       box-shadow: 0 0 0 2px rgba(245, 245, 220, 0.1);
     }
     
-    /* Remove spinner arrows (optional) */
+    /* Remove spinner arrows; Number input field only */
     input[type='number']::-webkit-inner-spin-button,
     input[type='number']::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -111,6 +111,81 @@
 
   .not-found{
     @apply border-[#3a3a3c] bg-[#3a3a3c];
+  }
+
+  /* Modal animations */
+  .modal-overlay-enter {
+    animation: fadeIn 0.2s ease;
+  }
+  
+  .modal-enter {
+    animation: slideUp 0.3s ease;
+  }
+  
+  .modal-overlay-exit {
+    animation: fadeOut 0.2s ease;
+  }
+  
+  .modal-exit {
+    animation: slideDown 0.2s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  
+  /* Scrollbar for modal */
+  #modal::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  #modal::-webkit-scrollbar-track {
+    background: #121213;
+  }
+  
+  #modal::-webkit-scrollbar-thumb {
+    background: #3a3a3c;
+    border-radius: 4px;
+  }
+  
+  #modal::-webkit-scrollbar-thumb:hover {
+    background: #565758;
   }
 
 }

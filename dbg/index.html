@@ -7,9 +7,108 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" rel="stylesheet" />
 </head>
 <body class="bg-darkBg w-full m-0 p-0">
-<h1 class="title">
-    WordleHR
-</h1>
+<!-- Full-page modal overlay -->
+<div id="modal-overlay" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
+  <div id="modal" class="bg-[#121213] border border-[#3a3a3c] rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+    <!-- Modal Header -->
+    <div class="border-b border-[#3a3a3c] p-4 flex items-center justify-between">
+      <h2 id="modal-title" class="text-primary text-xl font-bold"></h2>
+      <button id="modal-close-x" class="text-[#818384] hover:text-primary text-2xl w-8 h-8 flex items-center justify-center transition-colors">
+        ✕
+      </button>
+    </div>
+    
+    <!-- Modal Body -->
+    <div class="p-6">
+      <p id="modal-message" class="text-[#d7dadc] text-base leading-relaxed"></p>
+      
+      <!-- Optional: Stats or extra content -->
+      <div id="modal-content" class="mt-4"></div>
+    </div>
+    
+    <!-- Modal Footer (optional) -->
+    <div class="border-t border-[#3a3a3c] p-4 flex justify-end gap-2">
+      <button id="modal-close" class="bg-[#538d4e] hover:bg-[#6aaa64] text-white font-bold py-3 px-8 rounded uppercase text-sm tracking-wider transition-all duration-200">
+        U redu
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Game Page Overlay -->
+<div id="game-page" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
+    <div class="bg-[#121213] border border-[#3a3a3c] rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+        <!-- Header -->
+        <div class="border-b border-[#3a3a3c] p-4 flex items-center justify-between">
+            <h2 class="text-primary text-xl font-bold uppercase">Kako igrati</h2>
+            <button id="game-page-close" class="text-[#818384] hover:text-primary text-2xl w-8 h-8 flex items-center justify-center transition-colors">
+                ✕
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div class="p-6 text-[#d7dadc]">
+            <p class="mb-4">Pogodi <strong>WORDLE</strong> u 6 pokušaja.</p>
+            
+            <p class="mb-4">Svaki pokušaj mora biti valjana riječ od 5 slova. Pritisnite gumb "ENTER" za slanje.</p>
+            
+            <p class="mb-4">Nakon svakog pokušaja, boja pločica će se promijeniti kako bi pokazala koliko je vaše pogađanje bilo blizu riječi.</p>
+            
+            <p class="mb-6">
+                WordleHR je hrvatska (neslužbena) verzija 
+                <a href="https://www.nytimes.com/games/wordle" target="_blank" class="text-primary hover:text-white underline transition-colors">New York TImes WORDLE</a>-a.
+            </p>
+            
+            <div class="border-t border-[#3a3a3c] pt-4">
+                <h3 class="text-white font-bold mb-4">Primjeri</h3>
+                
+                <!-- Example 1: V is correct -->
+                <div class="grid-wordle mb-2">
+                    <div class="letter-box found">V</div>
+                    <div class="letter-box no-eval">O</div>
+                    <div class="letter-box no-eval">D</div>
+                    <div class="letter-box no-eval">E</div>
+                    <div class="letter-box no-eval">N</div>
+                </div>
+                <p class="mb-4 text-sm">Slovo <strong>V</strong> je u riječi i na ispravnom mjestu.</p>
+                
+                <!-- Example 2: A is in word but wrong position -->
+                <div class="grid-wordle mb-2">
+                    <div class="letter-box no-eval">P</div>
+                    <div class="letter-box exists">A</div>
+                    <div class="letter-box no-eval">T</div>
+                    <div class="letter-box no-eval">A</div>
+                    <div class="letter-box no-eval">K</div>
+                </div>
+                <p class="mb-4 text-sm">Slovo <strong>A</strong> je u riječi, ali na krivom mjestu.</p>
+                
+                <!-- Example 3: A is not in word -->
+                <div class="grid-wordle mb-2">
+                    <div class="letter-box no-eval">K</div>
+                    <div class="letter-box no-eval">O</div>
+                    <div class="letter-box no-eval">N</div>
+                    <div class="letter-box not-found">A</div>
+                    <div class="letter-box no-eval">C</div>
+                </div>
+                <p class="mb-4 text-sm">Slova <strong>A</strong> nema u riječi ni na jednom mjestu.</p>
+            </div>
+            
+            <div class="border-t border-[#3a3a3c] pt-4 mt-4">
+                <p class="font-bold text-center">Nova riječ biti će dostupna svaki dan!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <nav>
+        <h1 class="title">
+            WordleHR
+        </h1>
+    </nav>
+
 <div class="max-w-lg mx-auto px-4">
     <div id="dbgAlert" class="alert-box">
         <p class="text-center"><i class="fa-solid fa-triangle-exclamation"></i> This is a <b>Debug page</b>!</p>
@@ -109,7 +208,30 @@
         </div>
     </div>
 
+    <div class="modal-test">
+        <h2 class="text-[35px] font-wordle text-white mt-5 mb-7">Modal</h2>
+        <label class="text-primary font-medium">
+              Enter text for modal:
+        </label>
+        <br>
+        <input id="modal-input" autocomplete="off" type="text" class="mb-5" placeholder="Pogodeno" style="max-width: 150px!important;">
+        <button id="show-modal" class="ml-2 bg-primary text-darkBg font-bold py-2.5 px-6 rounded-lg uppercase tracking-wide transition-all duration-200 hover:bg-[#e8e5d0] hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+          Show Modal
+        </button>
+    </div>
 
+    <div class="help-test">
+        <h2 class="text-[35px] font-wordle text-white mt-5 mb-7">Help</h2>
+        <button id="show-help" class="bg-primary text-darkBg font-bold py-2.5 px-6 rounded-lg uppercase tracking-wide transition-all duration-200 hover:bg-[#e8e5d0] hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+            Pomoc
+        </button>
+    </div>
+
+
+    <div class="word-validation">
+        <h2 class="text-[35px] font-wordle text-white mt-5 mb-7">Word Validation</h2>
+        <div class="wordle-grid" id="grid-word-validation"></div>
+    </div>
 </div>
 
 <footer>
