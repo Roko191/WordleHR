@@ -85,7 +85,7 @@
 
   /* General classes applied to letter box */
   .grid-wordle {
-    @apply grid grid-cols-5 gap-1.5 max-w-[350px] mx-auto px-4;
+    @apply grid gap-1.5 max-w-[350px] mx-auto px-4;
   }
 
   .letter-box {

@@ -8,6 +8,8 @@
 
 import {createGrid} from "./wordle/grid";
 import { showModal } from "./modal";
+import { GameInput } from "./wordle/keyboard";
+import { WordleGame } from "./wordle/wordle";
 
 /* Grid generation testing */
 const dynamicGrid = document.getElementById("dynamic-gen-grid") as HTMLDivElement;
@@ -65,7 +67,60 @@ document.addEventListener('keydown', (e) => {
 
 /* Single line word validation test */
 const wordValidationGrid = document.getElementById("grid-word-validation") as HTMLDivElement;
+const activateBtn = document.getElementById('activate-wordle') as HTMLButtonElement;
+let btnState : boolean = false;
+if(!activateBtn){
+    console.error("Failed to fetch button");
+}
 
-document.addEventListener("keydown", (e) => {
+let game : WordleGame;
 
+// Create game instance (must await!)
+try {
+  game = await WordleGame.create('/hr_HR.json', 5);
+  game.getAnswer();
+  
+  // Now game is fully initialized and ready to use
+  console.log(game.isValidWord('BOMBA')); // true or false
+  
+} catch (error) {
+  console.error('Failed to create game:', error);
+  alert('Could not load word list!');
+}
+
+createGrid(wordValidationGrid, 5, 5);
+
+let input: GameInput | null = null;
+
+activateBtn.addEventListener('click', () => {
+  if (!btnState) {
+    btnState = true;
+    activateBtn.innerText = 'Dekativiraj';
+    
+    // Create new input
+    input = new GameInput(
+      wordValidationGrid,
+      (word) => { 
+        console.log('Submitted:', word); 
+        if(game.isValidWord(word)){
+          console.log('Submitted word ', word, 'is valid!');
+        } else {
+          console.warn('Submitted word ', word, 'is invalid!');
+        }
+        input?.moveToNextRow();
+    },
+      (err) => { alert(err); },
+      5, 5,
+      () => { alert('Game over!'); }
+    );
+  } else {
+    btnState = false;
+    activateBtn.innerText = 'Aktiviraj';
+    
+    // Destroy input
+    if (input) {
+      input.destroy();
+      input = null;
+    }
+  }
 });

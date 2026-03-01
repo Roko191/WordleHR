@@ -64,7 +64,7 @@
                 <h3 class="text-white font-bold mb-4">Primjeri</h3>
                 
                 <!-- Example 1: V is correct -->
-                <div class="grid-wordle mb-2">
+                <div class="grid-wordle grid-cols-5 mb-2">
                     <div class="letter-box found">V</div>
                     <div class="letter-box no-eval">O</div>
                     <div class="letter-box no-eval">D</div>
@@ -74,7 +74,7 @@
                 <p class="mb-4 text-sm">Slovo <strong>V</strong> je u riječi i na ispravnom mjestu.</p>
                 
                 <!-- Example 2: A is in word but wrong position -->
-                <div class="grid-wordle mb-2">
+                <div class="grid-wordle grid-cols-5 mb-2">
                     <div class="letter-box no-eval">P</div>
                     <div class="letter-box exists">A</div>
                     <div class="letter-box no-eval">T</div>
@@ -84,7 +84,7 @@
                 <p class="mb-4 text-sm">Slovo <strong>A</strong> je u riječi, ali na krivom mjestu.</p>
                 
                 <!-- Example 3: A is not in word -->
-                <div class="grid-wordle mb-2">
+                <div class="grid-wordle grid-cols-5 mb-2">
                     <div class="letter-box no-eval">K</div>
                     <div class="letter-box no-eval">O</div>
                     <div class="letter-box no-eval">N</div>
@@ -117,7 +117,7 @@
     <div id="box-examples">
         <h2 class="text-[35px] font-wordle text-white mt-5 mb-7">Letter boxes</h2>
             <div class="mb-10">
-            <div id="allBoxesType" class="grid-wordle">
+            <div id="allBoxesType" class="grid-wordle grid-cols-5">
                 <div class="letter-box no-letter"></div>
                 <div class="letter-box no-eval">K</div>
                 <div class="letter-box exists">U</div>
@@ -126,7 +126,7 @@
             </div>
             
             <h3 class="text-white text-md uppercase tracking-wide mb-2 text-center">Empty Boxes</h3>
-            <div id="emptyBoxes" class="grid-wordle">
+            <div id="emptyBoxes" class="grid-wordle grid-cols-5">
                 <div class="letter-box no-letter"></div>
                 <div class="letter-box no-letter"></div>
                 <div class="letter-box no-letter"></div>
@@ -135,7 +135,7 @@
             </div>
 
             <h3 class="text-white text-md uppercase tracking-wide mb-2 text-center">Not evaluated</h3>
-            <div id="notEval" class="grid-wordle">
+            <div id="notEval" class="grid-wordle grid-cols-5">
                 <div class="letter-box no-eval">B</div>
                 <div class="letter-box no-eval">I</div>
                 <div class="letter-box no-eval">R</div>
@@ -144,7 +144,7 @@
             </div>
 
             <h3 class="text-white text-md uppercase tracking-wide mb-2 text-center">Evaluated</h3>
-            <div id="notEval" class="grid-wordle">
+            <div id="notEval" class="grid-wordle grid-cols-5">
                 <div class="letter-box not-found">B</div>
                 <div class="letter-box found">O</div>
                 <div class="letter-box exists">M</div>
@@ -157,7 +157,7 @@
     <div class="grid-examples">
         <h2 class="text-[35px] font-wordle text-white mt-5 mb-7">Grid</h2>
         <h3 class="text-white text-md uppercase tracking-wide mb-2 text-center">Regular 5x5 grid</h3>
-        <div id="regular-grid" class="grid-wordle">
+        <div id="regular-grid" class="grid-wordle grid-cols-5">
                 <!-- ROW 1 -->
                 <div class="letter-box no-letter"></div>
                 <div class="letter-box no-letter"></div>
@@ -229,7 +229,10 @@
 
 
     <div class="word-validation">
-        <h2 class="text-[35px] font-wordle text-white mt-5 mb-7">Word Validation</h2>
+        <h2 class="text-[35px] font-wordle text-white mt-5 mb-7">Wordle Game</h2>
+        <button id="activate-wordle" class="mb-5 bg-primary text-darkBg font-bold py-2.5 px-6 rounded-lg uppercase tracking-wide transition-all duration-200 hover:bg-[#e8e5d0] hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+            Aktiviraj
+        </button>
         <div class="wordle-grid" id="grid-word-validation"></div>
     </div>
 </div>
@@ -239,7 +242,7 @@
         <h3 class="font-wordle text-5xl mb-4">WordleHR</h3>
         <p class="font-medium text-[#818384] mb-2">Napravio <a target="_blank" href="https://github.com/Roko191">Roko191</a></p>
         <p class="font-medium text-[#818384] mb-2">
-            Inspirirano <a href="https://www.nytimes.com/games/wordle" class="text-primary hover:text-white underline transition-colors">New York Times Wordle</a>
+            Inspirirano <a target="_blank" href="https://www.nytimes.com/games/wordle" class="text-primary hover:text-white underline transition-colors">New York Times Wordle</a>
         </p>
         <p class="font-medium text-[#565758] text-sm">&COPY; 2026 Roko191 |  <a target="_blank" href="https://opensource.org/licenses/MIT">MIT Licenca</a></p>
     </div>
