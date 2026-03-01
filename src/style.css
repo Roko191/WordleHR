@@ -15,7 +15,7 @@
       font-weight:normal;
       font-style:normal;
       font-display:swap;
-      src: url(/NYTKarnakCondensed/Wordle.woff2) format("woff");
+      src: url(/Wordle.woff2) format("woff");
     }
     
     /* Add these lines to fix centering */
