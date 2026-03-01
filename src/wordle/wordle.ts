@@ -118,37 +118,50 @@ export class WordleGame {
     return this.validWords.has(word.toUpperCase());
   }
 
-  private async updateDOM(result: ValidationResult): Promise<void> {
-    const startIndex = this.currentRow * this.cols;
+    private async updateDOM(result: ValidationResult): Promise<void> {
+      // Animation timing configuration
+      const FLIP_DURATION = 500;           // Total flip animation time (ms)
+      const DELAY_BETWEEN_BOXES = 200;     // Delay between each box (ms)
+      const COLOR_CHANGE_TIMING = 250;     // When to change color (ms) - should be FLIP_DURATION / 2
     
-    // Apply colors with flip animation and delay
-    for (let i = 0; i < this.cols; i++) {
-      await new Promise(resolve => setTimeout(resolve, 200)); // 200ms delay between each box
-      
-      const box = this.grid.querySelector(`[data-letter="${startIndex + i}"]`) as HTMLElement;
-      
-      if (box && result.states) {
-        const state = result.states[i];
+      const startIndex = this.currentRow * this.cols;
+    
+      // Apply flip animation to all boxes with staggered delay
+      for (let i = 0; i < this.cols; i++) {
+        const box = this.grid.querySelector(`[data-letter="${startIndex + i}"]`) as HTMLElement;
         
-        // Add flip animation
-        box.classList.add('animate-flip');
+        if (box && result.states) {
+          const state = result.states[i];
+          const delay = i * DELAY_BETWEEN_BOXES;
         
-        // Wait for half the animation to change color (when box is "flipped")
-        setTimeout(() => {
-          // Remove old state classes
-          box.classList.remove('no-eval', 'no-letter', 'found', 'exists', 'not-found');
-          
-          // Add new state class
-          box.classList.add(state);
-        }, 150); // Half of flip animation duration
-        
-        // Remove animation class after animation completes
-        setTimeout(() => {
-          box.classList.remove('animate-flip');
-        }, 300); // Full flip animation duration
+          // Start flip animation after delay
+          setTimeout(() => {
+            // Remove transition to prevent conflict
+            box.style.transition = 'none';
+            
+            box.classList.add('animate-flip');
+            
+            // Change color at halfway point
+            setTimeout(() => {
+              box.classList.remove('no-eval', 'no-letter', 'found', 'exists', 'not-found');
+              box.classList.add(state);
+            }, COLOR_CHANGE_TIMING);
+            
+            // Remove animation class and restore transition after it completes
+            setTimeout(() => {
+              box.classList.remove('animate-flip');
+              box.style.transition = ''; // Restore original transition
+            }, FLIP_DURATION);
+            
+          }, delay);
+        }
       }
+      
+      // Wait for all animations to complete
+      await new Promise(resolve => 
+        setTimeout(resolve, this.cols * DELAY_BETWEEN_BOXES + FLIP_DURATION)
+      );
     }
-  }
 
   public async checkGuess(guess: string): Promise<void> {
     if (this.word) {
