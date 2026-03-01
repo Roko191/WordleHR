@@ -14,6 +14,7 @@ export class GameInput {
     private onSubmit: (word: string) => void;
     private onError: (message: string) => void;
     private onGameOver: () => void
+    private keyboardHandler!: (e: KeyboardEvent) => void;
 
     constructor(
     grid: HTMLDivElement, 
@@ -31,27 +32,25 @@ export class GameInput {
         this.onGameOver = onGameOver;
     }
 
-    private initKeyboard():void {
-        document.addEventListener('keydown', (e) => {
-            const key = e.key;
-
-            // Make sure its valid letter
-            if (/^[a-zA-ZčćžšđČĆŽŠĐ]$/.test(key)) {
-                this.addLetter(key.toUpperCase());
-            }
-
-            // Backspace
-            else if(key === 'Backspace') {
-                this.removeLetter();
-            }
-
-            // Handle Enter
-            else if(key === 'Enter'){
-                this.submit();
-            }
-        })
-    }
-
+      private initKeyboard(): void {
+        // Store the handler so we can remove it later
+        this.keyboardHandler = (e: KeyboardEvent) => {
+          const key = e.key;
+        
+          if (/^[a-zA-ZčćžšđČĆŽŠĐ]$/.test(key)) {
+            this.addLetter(key.toUpperCase());
+          } else if(key === 'Backspace') {
+            this.removeLetter();
+          } else if(key === 'Enter'){
+            e.preventDefault();
+            e.stopPropagation();
+            this.submit();
+          }
+        };
+        
+        document.addEventListener('keydown', this.keyboardHandler);
+      }
+      
 
     private addLetter(letter: string): void {
         if(this.currentCol >= this.COLS) return;
@@ -125,4 +124,9 @@ export class GameInput {
         this.currentRow = 0;
     }
 
+        // Add this method
+      public destroy(): void {
+        document.removeEventListener('keydown', this.keyboardHandler);
+      }
+    
 }
