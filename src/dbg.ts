@@ -10,6 +10,7 @@ import {createGrid} from "./wordle/grid";
 import { showModal } from "./modal";
 import { GameInput } from "./wordle/keyboard";
 import { WordleGame } from "./wordle/wordle";
+import { CeaserChiper } from "./caesar";
 
 /* Grid generation testing */
 const dynamicGrid = document.getElementById("dynamic-gen-grid") as HTMLDivElement;
@@ -73,11 +74,22 @@ if(!activateBtn){
     console.error("Failed to fetch button");
 }
 
+/* Get url params */
+let paramWord: string | null = null;
+const paramCaesarWord : string | null = new URLSearchParams(document.location.search).get("word");
+console.log(paramCaesarWord);
+if(paramCaesarWord) {paramWord = CeaserChiper.decode(paramCaesarWord, {alphabet: "abcčćdđefghijklmnoprstuvzžš"});}
+console.log('The word in url param is ', paramWord);
+
 let game : WordleGame;
 
 // Create game instance (must await!)
 try {
-  game = await WordleGame.create('/hr_HR.json', 5);
+  if(paramWord){
+    game = await WordleGame.create('/hr_HR.json', wordValidationGrid, 5, paramWord);
+  } else {
+    game = await WordleGame.create('/hr_HR.json', wordValidationGrid, 5);
+  }
   game.getAnswer();
   
   // Now game is fully initialized and ready to use
@@ -104,10 +116,15 @@ activateBtn.addEventListener('click', () => {
         console.log('Submitted:', word); 
         if(game.isValidWord(word)){
           console.log('Submitted word ', word, 'is valid!');
+          input?.moveToNextRow();
+          // if (game.isAnswer(word)){
+          //   console.log('CORRECT ANSWER');
+          // } else {
+          //   console.log('Try again!')
+          // }
         } else {
           console.warn('Submitted word ', word, 'is invalid!');
         }
-        input?.moveToNextRow();
     },
       (err) => { alert(err); },
       5, 5,
@@ -124,3 +141,12 @@ activateBtn.addEventListener('click', () => {
     }
   }
 });
+
+document.getElementById("caesar-btn")?.addEventListener('click', (e) => {
+  e.preventDefault();
+  let inputBox = document.getElementById('caesar-input') as HTMLInputElement;
+  let resultBox = document.getElementById('caesar-result') as HTMLElement;
+  let encoded = CeaserChiper.encode(inputBox.value, {alphabet: "abcčćdđefghijklmnoprstuvzžš"}); 
+  resultBox.innerText = `http://localhost:5173/dbg/index.html?word=${encoded}`
+  resultBox.setAttribute('href', `/dbg/index.html?word=${encoded}`);
+})
