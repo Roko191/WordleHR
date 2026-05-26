@@ -1,5 +1,5 @@
-import { validateWord } from "./word";
-import type { ValidationResult } from "./word";
+import { validateWord, tokenize } from './word';
+import type { ValidationResult, LetterState } from './word';
 
 interface WordData {
   version: string;
@@ -86,37 +86,38 @@ export class WordleGame {
     }
   }
 
-  private getRandomWord(): string | null {
-    const categoryName = `${this.wordLength}-letter`;
-    if (this.wordData) {
-      return this.wordData.categories[categoryName][
-        Math.floor(Math.random() * this.wordData.categories[categoryName].length)
-      ];
-    }
-    return null;
-  }
 
-  private createWordSet(wordData: WordData): void {
-    const categoryName = `${this.wordLength}-letter`;
-    
-    // Check if category exists
-    if (!wordData.categories[categoryName]) {
-      throw new Error(`No words found for ${this.wordLength}-letter category`);
-    }
-    
-    const words = wordData.categories[categoryName];
-    
-    // Populate set with uppercase words
-    words.forEach(word => {
-      this.validWords.add(word.toUpperCase());
-    });
-    
-    console.log(`Loaded ${this.validWords.size} words for ${this.wordLength}-letter category`);
-  }
+    private getRandomWord(): string | null {
+      if (!this.wordData) return null;
 
-  public isValidWord(word: string): boolean {
-    return this.validWords.has(word.toUpperCase());
-  }
+      const words: string[] = [];
+      Object.values(this.wordData.categories).forEach(categoryWords => {
+        categoryWords.forEach(word => {
+          if (tokenize(word).length === this.wordLength) {
+            words.push(word);
+          }
+        });
+      });
+
+      if (words.length === 0) return null;
+      return words[Math.floor(Math.random() * words.length)];
+    }
+
+    private createWordSet(wordData: WordData): void {
+      Object.values(wordData.categories).forEach(words => {
+        words.forEach(word => {
+          if (tokenize(word).length === this.wordLength) {
+            this.validWords.add(word.toUpperCase());
+          }
+        });
+      });
+
+      console.log(`Loaded ${this.validWords.size} words for ${this.wordLength}-letter category`);
+    }
+
+    public isValidWord(word: string): boolean {
+      return this.validWords.has(word.toUpperCase());
+    }
 
     private async updateDOM(result: ValidationResult): Promise<void> {
       // Animation timing configuration
@@ -163,19 +164,29 @@ export class WordleGame {
       );
     }
 
-  public async checkGuess(guess: string): Promise<void> {
-    if (this.word) {
-      const wordValidation: ValidationResult = validateWord(guess, this.word);
-      await this.updateDOM(wordValidation);
-      this.currentRow++;
+    public async checkGuess(guess: string): Promise<{ isCorrect: boolean, states: LetterState[] }> {
+      if (this.word) {
+        const wordValidation: ValidationResult = validateWord(guess, this.word);
+        await this.updateDOM(wordValidation);
+        this.currentRow++;
+        return { isCorrect: wordValidation.isCorrect, states: wordValidation.states };
+      }
+      return { isCorrect: false, states: [] };
     }
+
+  public getAnswerString(): string {
+    return this.word ?? '';
   }
 
   public getAnswer(): void {
-    console.log(`Random selected word is: ${this.word}`);
+    console.log(`Random selected word is: ${this.getAnswerString()}`);
   }
 
   public getCurrentRow(): number {
     return this.currentRow;
+  }
+
+  public isCorrectWord(word: string): boolean {
+    return this.word !== null && word.toUpperCase() === this.word.toUpperCase();
   }
 }

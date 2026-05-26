@@ -1,0 +1,11 @@
+export function showToast(message: string): void {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('toast-exit');
+    setTimeout(() => toast.remove(), 300);
+  }, 1500);
+}

@@ -118,20 +118,20 @@
     animation: flip 0.5s ease;
   }
   
-@keyframes flip {
-  0% {
-    transform: rotateX(0);
+  @keyframes flip {
+    0% {
+      transform: rotateX(0);
+    }
+    49% {
+      transform: rotateX(90deg);
+    }
+    51% {
+      transform: rotateX(90deg);
+    }
+    100% {
+      transform: rotateX(0);
+    }
   }
-  49% {
-    transform: rotateX(90deg);
-  }
-  51% {
-    transform: rotateX(90deg);
-  }
-  100% {
-    transform: rotateX(0);
-  }
-}
   /* Modal animations */
   .modal-overlay-enter {
     animation: fadeIn 0.2s ease;
@@ -187,6 +187,18 @@
       opacity: 0;
       transform: translateY(20px);
     }
+  }
+
+  .toast {
+    @apply fixed top-20 left-1/2 -translate-x-1/2 bg-primary text-darkBg font-bold py-2 px-5 rounded uppercase text-sm tracking-wider z-[100];
+    animation: slideDown 0.3s ease;
+  }
+  .toast-exit {
+    animation: toast-out 0.3s ease forwards;
+  }
+  @keyframes toast-out {
+    from { opacity: 1; transform: translate(-50%, 0); }
+    to   { opacity: 0; transform: translate(-50%, -10px); }
   }
   
   /* Scrollbar for modal */

@@ -11,6 +11,10 @@ import { showModal } from "./modal";
 import { GameInput } from "./wordle/keyboard";
 import { WordleGame } from "./wordle/wordle";
 import { CeaserChiper } from "./caesar";
+import { showToast } from "./toast";
+
+import { tokenize } from './wordle/word';
+import { OnscreenKeyboard } from './wordle/onscreen-keyboard';
 
 /* Grid generation testing */
 const dynamicGrid = document.getElementById("dynamic-gen-grid") as HTMLDivElement;
@@ -76,23 +80,30 @@ if(!activateBtn){
 
 /* Get url params */
 let paramWord: string | null = null;
-const paramCaesarWord : string | null = new URLSearchParams(document.location.search).get("word");
+const paramCaesarWord: string | null = new URLSearchParams(document.location.search).get("word");
 console.log(paramCaesarWord);
-if(paramCaesarWord) {paramWord = CeaserChiper.decode(paramCaesarWord, {alphabet: "abcčćdđefghijklmnoprstuvzžš"});}
+if (paramCaesarWord) {
+  paramWord = CeaserChiper.decode(paramCaesarWord, { alphabet: "abcčćdđefghijklmnoprstuvzžš" });
+}
 console.log('The word in url param is ', paramWord);
 
-let game : WordleGame;
+let game: WordleGame;
 
 // Create game instance (must await!)
 try {
-  if(paramWord){
-    game = await WordleGame.create('/hr_HR.json', wordValidationGrid, 5, paramWord);
-  } else {
-    game = await WordleGame.create('/hr_HR.json', wordValidationGrid, 5);
-  }
+  // WordleGame.create(wordListUrl, grid, word?, cols?, maxRows?, wordLength?)
+  game = await WordleGame.create(
+    '/hr_HR.json',           // wordListUrl
+    wordValidationGrid,      // grid
+    paramWord,               // word (null if no param)
+    5,                       // cols (default 5)
+    5,                       // maxRows (default 5)
+    5                        // wordLength (default 5)
+  );
+  
   game.getAnswer();
   
-  // Now game is fully initialized and ready to use
+  // Test validation
   console.log(game.isValidWord('BOMBA')); // true or false
   
 } catch (error) {
@@ -103,42 +114,73 @@ try {
 createGrid(wordValidationGrid, 5, 5);
 
 let input: GameInput | null = null;
+let onscreenKb: OnscreenKeyboard | null = null;
 
 activateBtn.addEventListener('click', () => {
   if (!btnState) {
     btnState = true;
     activateBtn.innerText = 'Dekativiraj';
-    
-    // Create new input
+
+    const kbContainer = document.getElementById('onscreen-keyboard') as HTMLElement;
+
     input = new GameInput(
       wordValidationGrid,
-      (word) => { 
-        console.log('Submitted:', word); 
-        if(game.isValidWord(word)){
-          console.log('Submitted word ', word, 'is valid!');
-          input?.moveToNextRow();
-          // if (game.isAnswer(word)){
-          //   console.log('CORRECT ANSWER');
-          // } else {
-          //   console.log('Try again!')
-          // }
+      
+      
+      async (word) => {
+
+        console.log(game.isValidWord('NJUŠKA'))
+        console.log(`Word: ${word}`);
+        console.log(`game.isCorrectWord: ${game.isCorrectWord(word)}`);
+        console.log(`game.isValidWord: ${game.isValidWord(word)}`);
+
+        if (game.isCorrectWord(word) || game.isValidWord(word)) {
+          const { isCorrect, states } = await game.checkGuess(word);
+          onscreenKb?.updateKeys(tokenize(word), states);
+
+          if (isCorrect) {
+            await showModal({
+              title: 'Čestitamo!',
+              message: `Pogodili ste riječ za ${game.getCurrentRow()} pokušaja.`,
+              type: 'success'
+            });
+            input?.destroy();
+            onscreenKb?.destroy();
+            input = null;
+            onscreenKb = null;
+          } else {
+            input?.moveToNextRow();
+          }
         } else {
-          console.warn('Submitted word ', word, 'is invalid!');
+          showToast('Nepoznata riječ');
         }
-    },
-      (err) => { alert(err); },
-      5, 5,
-      () => { alert('Game over!'); }
+      },
+      (err) => { showToast(err); },
+      5,
+      5,
+      async () => {
+        await showModal({
+          title: 'Game over!',
+          message: `Riječ je bila: ${game.getAnswer()}`,
+          type: 'error'
+        });
+        input?.destroy();
+        onscreenKb?.destroy();
+        input = null;
+        onscreenKb = null;
+      }
     );
+
+    onscreenKb = new OnscreenKeyboard(kbContainer, input);
+
   } else {
     btnState = false;
     activateBtn.innerText = 'Aktiviraj';
-    
-    // Destroy input
-    if (input) {
-      input.destroy();
-      input = null;
-    }
+
+    input?.destroy();
+    onscreenKb?.destroy();
+    input = null;
+    onscreenKb = null;
   }
 });
 
