@@ -5,8 +5,6 @@
     from keyboard
 */
 
-import { tokenize } from './word';
-
 export class GameInput {
   private grid: HTMLDivElement;
   private currentRow: number = 0;

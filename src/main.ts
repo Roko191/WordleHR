@@ -27,11 +27,11 @@ createGrid(wordleGrid, 5, 5);
 let game: WordleGame;
 try {
   game = await WordleGame.create(
-    '/hr_HR.json',
+    `${import.meta.env.BASE_URL}hr_HR.json`,
     wordleGrid,
     paramWord,
     5,
-    5,
+    //5,
     5
   );
 } catch (error) {

@@ -97,7 +97,7 @@ try {
     wordValidationGrid,      // grid
     paramWord,               // word (null if no param)
     5,                       // cols (default 5)
-    5,                       // maxRows (default 5)
+    //5,                       // maxRows (default 5)
     5                        // wordLength (default 5)
   );
   

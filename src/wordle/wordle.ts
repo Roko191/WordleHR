@@ -16,7 +16,7 @@ export class WordleGame {
   private wordListUrl: string;
   private wordLength: number;
   private cols: number;
-  private maxRows: number;
+  //private maxRows: number;
   private currentRow: number = 0;
   private validWords: Set<string>;
   private wordData: WordData | null = null;
@@ -28,14 +28,14 @@ export class WordleGame {
     wordListUrl: string, 
     wordLength: number,
     cols: number,
-    maxRows: number,
+    //maxRows: number,
     grid: HTMLDivElement, 
     word: string | null = null
   ) {
     this.wordListUrl = wordListUrl;
     this.wordLength = wordLength;
     this.cols = cols;
-    this.maxRows = maxRows;
+    //this.maxRows = maxRows;
     this.validWords = new Set();
     this.grid = grid;
     if (word) {
@@ -48,10 +48,10 @@ export class WordleGame {
     grid: HTMLDivElement,
     word: string | null = null,
     cols: number = 5,
-    maxRows: number = 5,
+    // maxRows: number = 5,
     wordLength: number = -5,
   ): Promise<WordleGame> {
-    const game = new WordleGame(wordListUrl, wordLength, cols, maxRows, grid, word);
+    const game = new WordleGame(wordListUrl, wordLength, cols, grid, word);
     await game.initialize();
     return game;
   }
