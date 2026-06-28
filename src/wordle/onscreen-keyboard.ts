@@ -28,11 +28,11 @@ export class OnscreenKeyboard {
 
   private render(): void {
     this.container.innerHTML = '';
-    this.container.className = 'flex flex-col items-center gap-1.5 pb-4';
+    this.container.className = 'flex flex-col items-stretch gap-1.5 pb-4 w-full';
 
     for (const row of ROWS) {
       const rowEl = document.createElement('div');
-      rowEl.className = 'flex gap-1.5 justify-center';
+      rowEl.className = 'flex gap-1 justify-center w-full';
 
       for (const key of row) {
         const btn = document.createElement('button');
@@ -50,8 +50,8 @@ export class OnscreenKeyboard {
   private getKeyClass(key: string, state: KeyState): string {
     const isWide = key === 'ENTER' || key === '⌫';
     const isDigraph = key === 'NJ' || key === 'LJ' || key === 'DŽ';
-    const base = `h-[58px] rounded font-bold text-sm uppercase tracking-wide transition-colors duration-200 select-none`;
-    const width = isWide ? 'px-3 min-w-[56px]' : isDigraph ? 'min-w-[42px] px-1' : 'w-[36px]';
+    const base = `h-[46px] rounded font-bold text-xs uppercase tracking-wide transition-colors duration-200 select-none flex-1`;
+    const width = isWide ? 'max-w-[56px]' : isDigraph ? 'max-w-[42px]' : 'max-w-[36px]';
 
     const colors: Record<KeyState, string> = {
       default: 'bg-[#818384] text-white',
@@ -94,7 +94,7 @@ export class OnscreenKeyboard {
       btn.classList.add('key-disabled');
     });
   }
- 
+
   public destroy(): void {
     this.container.innerHTML = '';
     this.keyStates.clear();
