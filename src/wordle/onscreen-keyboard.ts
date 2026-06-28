@@ -1,5 +1,5 @@
 /*
-    onscreen-keyboar`d`.ts
+    onscreen-keyboard.ts
     Author: Roko
     Description: Renders and manages the on-screen Croatian keyboard
 */
