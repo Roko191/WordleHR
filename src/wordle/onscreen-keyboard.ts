@@ -1,5 +1,5 @@
 /*
-    onscreen-keyboard.ts
+    onscreen-keyboar`d`.ts
     Author: Roko
     Description: Renders and manages the on-screen Croatian keyboard
 */
@@ -89,6 +89,12 @@ export class OnscreenKeyboard {
     }
   }
 
+  public disable(): void {
+    this.keyElements.forEach(btn => {
+      btn.classList.add('key-disabled');
+    });
+  }
+ 
   public destroy(): void {
     this.container.innerHTML = '';
     this.keyStates.clear();
