@@ -1,4 +1,4 @@
-name: Deploy to FESB PZI
+name: Deploy to FESB PZI server
 
 on:
   push:
@@ -24,13 +24,23 @@ jobs:
       - name: Build
         run: npx tsc && npx vite build --base=/~rovukov26/wordle/
 
-      - name: Deploy to PZI server
-        uses: burnett01/rsync-deployments@7.0.1
+      - name: Upload build to server
+        uses: appleboy/scp-action@v0.1.7
         with:
-          switches: -avzr --delete
-          path: dist/
-          remote_path: ~/public_html/wordle/
-          remote_host: pzi1.fesb.hr
-          remote_port: 22
-          remote_user: rovukov26
-          remote_key: ${{ secrets.PZI_DEPLOY_KEY }}
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
+          key: ${{ secrets.DEPLOY_PZI_KEY }}
+          port: 22
+          source: "dist/*"
+          target: "~/public_html/wordle"
+          strip_components: 1
+
+      - name: Fix permissions
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
+          key: ${{ secrets.DEPLOY_PZI_KEY }}
+          port: 22
+          script: |
+            chmod -R 755 ~/public_html/wordle
