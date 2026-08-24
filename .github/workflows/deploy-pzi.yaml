@@ -1,0 +1,36 @@
+name: Deploy to FESB PZI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npx tsc && npx vite build --base=/~rovukov26/wordle/
+
+      - name: Deploy to PZI server
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          path: dist/
+          remote_path: ~/public_html/wordle/
+          remote_host: pzi1.fesb.hr
+          remote_port: 22
+          remote_user: rovukov26
+          remote_key: ${{ secrets.PZI_DEPLOY_KEY }}
